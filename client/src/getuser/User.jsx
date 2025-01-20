@@ -32,7 +32,14 @@ const User = () => {
   return (
     <div className='userTable'>
         <Link to="/add" type='button' className='btn btn-primary'>Add User <i class="fa-solid fa-user-plus"></i></Link>
-        <table className='table table-bordered'>
+
+        {users.length === 0 ?(
+            <div className='noData'>
+                <h3>No Data to display.</h3>
+                <p>Please add New User</p>
+            </div>
+        ):(
+            <table className='table table-bordered'>
             <thead>
                 <tr>
                     <th scope='col'>Si:No.</th>
@@ -62,6 +69,8 @@ const User = () => {
                 
             </tbody>
         </table>
+        )}
+        
 
     </div>
   )
