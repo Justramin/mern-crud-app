@@ -1,14 +1,14 @@
 import express from "express"
+import upload from '../utils/multer.js'
+import authMiddleware from "../utils/jwtVerification.js";
 
-import { create, deleteUser, getAllUsers, getUserById, update } from "../controller/userController.js"
+import { create, deleteUser, getAllUsers, getUserById, update, login } from "../controller/userController.js"
 
-const route = express.Router();
+const userRoute = express.Router();
 
-route.post ("/user",create);
-route.get("/users",getAllUsers);
-route.get('/user/:id',getUserById);
-route.put('/update/user/:id',update);
-route.delete('/delete/user/:id',deleteUser);
+userRoute.post("/signup",create);
+userRoute.post("/login",login)
+userRoute.put('/update/:id',authMiddleware,upload.single('profilePicture'), update);
 
 
-export default route;
+export default userRoute;

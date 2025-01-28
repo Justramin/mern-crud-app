@@ -1,5 +1,6 @@
 import User from "../model/userModel.js";
-
+import jwt from 'jsonwebtoken';
+import fs from "fs";
 
 
 export const create = async(req,res)=>{
@@ -11,8 +12,7 @@ export const create = async(req,res)=>{
         if(userExist){
             return res.status(400).json({message:" User already exists. "})
         }
-        const saveData = await newUser.save();
-        // res.status(200).json(saveData);
+        await newUser.save();
         res.status(200).json({message:"User created Successfully."});
     } catch (error) {
         res.status(500).json({errorMessage:error.message})
@@ -50,16 +50,34 @@ export const getUserById = async(req,res)=>{
 
 
 export const update = async(req,res)=>{
+    console.log('Entering------------------------------------------------------------');
+    
+    console.log('file',req.file);
+
+    console.log(req.body,'----body')
+    
     try {
         const id = req.params.id;
         const userExist = await User.findById(id);
         if(!userExist){
             return res.status(404).json({message : " User not found. "});
         }
-        const updatedData = await User.findByIdAndUpdate(id,req.body,{new:true});
-        // res.status(200).json(updatedData)
-        res.status(200).json({message:"User Updated Successfully."});
+
+        if (req.file) {
+
+            console.log(req.file);
+            const imagepath = req.file.path.replace('/Users/justin/Desktop/MERN_CRUD/server/','http://localhost:8000/')
+            await User.updateOne({email:req.body.email},{$set:{profilePicture:imagepath}})
+        }
+
+        console.log('Body Data is-------',req.body.updatedData);
+        
+        // const updatedUser = await User.findByIdAndUpdate(id, req.body.updatedData, { new: true });
+        const updatedUser = await User.updateOne({email:req.body.email},{$set:{name:req.body.name}})
+        
+        res.status(200).json({ message: "User Updated Successfully.", updatedUser });
     } catch (error) {
+        console.log('error in the ',error)
         res.status(500).json({errorMessage: error.message})
     }
 };
@@ -78,3 +96,33 @@ export const deleteUser = async(req,res)=>{
         res.status(500).json({errorMessage: error.message})
     }
 };
+
+export const login = async(req,res)=>{
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+    if (!user || user.password !== password) {
+      return res.status(400).json({ message: "Invalid email or password." });
+    }
+    const userdata ={
+        _id:user._id,
+        name: user.name,
+        email: user.email,
+        address: user.address,
+        profilePicture: user.profilePicture,
+    }
+    
+    const token = generateToken(user._id);
+    res.status(200).json({ token , userdata });
+
+    } catch (error) {
+        res.status(500).json({errorMessage: error.message})
+    }
+};
+
+const generateToken = (userId) => {
+    return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+      expiresIn: "7d", // Token valid for 7 days
+    });
+  };
