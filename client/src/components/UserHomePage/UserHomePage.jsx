@@ -113,7 +113,6 @@ const UserHomePage = () => {
         {!isEditing ? (
           <>
             <h2>{userdata.name}</h2>
-            <h2>{userdata.date}</h2>
             <p>{userdata.email}</p>
             <button className="edit-button" onClick={handleEdit}>
               Edit Profile
