@@ -2,6 +2,25 @@ import User from "../model/userModel.js";
 import jwt from 'jsonwebtoken';
 import fs from "fs";
 
+export const adminlogin = async(req,res)=>{
+    const {email, password} = req.body;
+    try {
+        console.log('data is called',req.body)
+        const user = await User.findOne({email});
+        console.log(user)
+        if(!user || user.password !== password){
+            return res.status(400).json({message:'Invalid email of password'});
+        }
+        if(user.isAdmin){
+            const token = generateToken(user._id);
+            res.status(200).json({success:true,token});
+        }else{
+            res.status(401).json({message:'you are not authorized'});
+        }
+    } catch (error) {
+        res.status(500).json({errorMessage:error.message})
+    }
+}
 
 export const create = async(req,res)=>{
     try {

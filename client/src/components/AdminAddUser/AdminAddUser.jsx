@@ -22,6 +22,10 @@ const AddUser = () => {
 
     const submitForm = async(e)=>{
         e.preventDefault();
+        const token = localStorage.getItem('adminToken');
+    if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    }
         await axios.post("http://localhost:8000/api/user",user)
         .then((response)=>{
             toast.success(response.data.message,{position:"top-right"});

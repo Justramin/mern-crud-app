@@ -20,6 +20,11 @@ const UpdateUser = () => {
         setUser({ ...user, [name]:value});
     };
 
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    }
+
     useEffect(()=>{
         axios.get(`http://localhost:8000/api/user/${id}`)
         .then((response)=>{

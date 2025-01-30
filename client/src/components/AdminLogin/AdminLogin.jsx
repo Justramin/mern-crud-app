@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import './AdminLogin.css'; // Import the CSS file for styling
 import { useNavigate } from 'react-router-dom';
 import toast, { LoaderIcon } from "react-hot-toast";
+import axios from 'axios';
 
 
 const AdminLogin = () => {
     const navigate = useNavigate()
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
 
   const token = localStorage.getItem('adminToken');
@@ -22,18 +23,32 @@ const AdminLogin = () => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
-    // Dummy authentication logic
-    if (credentials.username === 'admin' && credentials.password === '123') {
+    try {
+      const result = await axios.post('http://localhost:8000/api/login',credentials);
+
+      console.log(result,'----admin login');
+      if(result.data.success){
+        toast.success('Login successful!');
+      localStorage.setItem('adminToken',result.data.token);
       navigate('/admin')
-      toast.success('Login successful!');
-      localStorage.setItem('adminToken','adminToken1234');
-      // Redirect to the admin dashboard (implement routing later)
-    } else {
-      setError('Invalid username or password.');
+      }
+    } catch (error) {
+      toast.error('Internal server Error');
+      console.log('error',error)
     }
+
+    // Dummy authentication logic
+    // if (credentials.username === 'admin' && credentials.password === '123') {
+    //   navigate('/admin')
+    //   toast.success('Login successful!');
+    //   localStorage.setItem('adminToken','adminToken1234');
+    //   // Redirect to the admin dashboard (implement routing later)
+    // } else {
+    //   setError('Invalid username or password.');
+    // }
   };
 
   return (
@@ -44,10 +59,10 @@ const AdminLogin = () => {
           <div className="form-group">
             <label htmlFor="username">Username:</label>
             <input
-              type="text"
-              id="username"
-              name="username"
-              placeholder="Enter your username"
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your Email address"
               value={credentials.username}
               onChange={handleChange}
               required
