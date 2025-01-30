@@ -5,9 +5,7 @@ import fs from "fs";
 export const adminlogin = async(req,res)=>{
     const {email, password} = req.body;
     try {
-        console.log('data is called',req.body)
         const user = await User.findOne({email});
-        console.log(user)
         if(!user || user.password !== password){
             return res.status(400).json({message:'Invalid email of password'});
         }
@@ -69,12 +67,6 @@ export const getUserById = async(req,res)=>{
 
 
 export const update = async(req,res)=>{
-    console.log('Entering------------------------------------------------------------');
-    
-    console.log('file',req.file);
-
-    console.log(req.body,'----body')
-    
     try {
         const id = req.params.id;
         const userExist = await User.findById(id);
@@ -83,13 +75,9 @@ export const update = async(req,res)=>{
         }
 
         if (req.file) {
-
-            console.log(req.file);
             const imagepath = req.file.path.replace('/Users/justin/Desktop/MERN_CRUD/server/','http://localhost:8000/')
             await User.updateOne({email:req.body.email},{$set:{profilePicture:imagepath}})
         }
-
-        console.log('Body Data is-------',req.body.updatedData);
         
         // const updatedUser = await User.findByIdAndUpdate(id, req.body.updatedData, { new: true });
         const updatedUser = await User.updateOne({email:req.body.email},{$set:{name:req.body.name}})

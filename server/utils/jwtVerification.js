@@ -15,7 +15,6 @@ const authMiddleware = async (req, res, next) => {
                 res.status(401).json({ success: false, message: 'Invalid token' });
                 return;
             } else {
-                console.log(decode, '-----------jwt decoded data')
                 next();
             }
         })
