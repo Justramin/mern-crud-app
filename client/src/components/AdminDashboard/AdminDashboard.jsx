@@ -49,9 +49,10 @@ const User = () => {
     };
 
     const filteredUsers = users.filter(user =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.address.toLowerCase().includes(searchTerm.toLowerCase())
+        user.address.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        user.isAdmin === false
     );
 
     return (

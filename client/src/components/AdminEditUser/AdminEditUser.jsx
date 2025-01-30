@@ -60,7 +60,7 @@ const UpdateUser = () => {
             </div>
             <div className='inputGroup'>
                 <label htmlFor='email'>Email : </label>
-                <input type='email' id='email' value={user.email} onChange={inputHandler} name='email' autoComplete='off' placeholder='Enter Your Email' />
+                <input type='email' id='email' value={user.email}  name='email' autoComplete='off' placeholder='Enter Your Email' disabled />
             </div>
             <div className='inputGroup'>
                 <label htmlFor='address'>Address : </label>

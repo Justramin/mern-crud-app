@@ -79,8 +79,16 @@ export const update = async(req,res)=>{
             await User.updateOne({email:req.body.email},{$set:{profilePicture:imagepath}})
         }
         
-        // const updatedUser = await User.findByIdAndUpdate(id, req.body.updatedData, { new: true });
-        const updatedUser = await User.updateOne({email:req.body.email},{$set:{name:req.body.name}})
+
+        const updatedUser = await User.updateOne(
+            {email:req.body.email},
+            {
+                $set:{
+                    name:req.body.name,
+                    address: req.body.address
+                }
+            }
+        );
         
         res.status(200).json({ message: "User Updated Successfully.", updatedUser });
     } catch (error) {
