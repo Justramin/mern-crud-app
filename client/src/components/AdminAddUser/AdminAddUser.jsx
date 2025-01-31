@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './AdminAddUser.css'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
@@ -11,6 +11,16 @@ const AddUser = () => {
         address: "",
         password: "",
     };
+
+     const token = localStorage.getItem('adminToken');
+    
+      useEffect(()=>{
+        console.log(token)
+        if(!token){
+            navigate('/adminlogin')
+        }
+      },[]);
+
     const [user , setUser] =useState(users);
     const navigate = useNavigate();
 

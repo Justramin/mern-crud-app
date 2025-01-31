@@ -24,6 +24,13 @@ const UpdateUser = () => {
     if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     }
+        
+    useEffect(()=>{
+        console.log(token)
+        if(!token){
+            navigate('/adminlogin')
+        }
+    },[]);
 
     useEffect(()=>{
         axios.get(`http://localhost:8000/api/user/${id}`)
