@@ -5,6 +5,7 @@ import axios from "axios";
 import "./UserLogin.css";
 import {useNavigate} from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux";
+import { setDate } from "../../redux/slices/date";
 
 const UserLogin = () => {
 const navigate = useNavigate()
@@ -35,6 +36,8 @@ const navigate = useNavigate()
 
       // Save token in Redux store and localStorage
       dispatch(login(userdata));
+      const date = new Date().toString().split(' ').slice(0,4).join(' ');
+      dispatch(setDate(date))
       localStorage.setItem("authToken", token);
       console.log('redux',data)
       navigate('/home')

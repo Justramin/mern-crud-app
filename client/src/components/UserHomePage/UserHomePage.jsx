@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, login } from "../../redux/slices/authSlice";
+import {setDate,removeDate} from '../../redux/slices/date'
 import "./UserHomePage.css";
 import defaultImage from '../../../src/assets/defalut.webp'
 import axios from 'axios'
@@ -11,6 +12,8 @@ const UserHomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userdata, isAuthenticated } = useSelector((state) => state.auth);
+  const {date} = useSelector((state)=>state.date)
+console.log(date,'This is Date..............');
 
   const [isEditing, setIsEditing] = useState(false);
   const [updatedData, setUpdatedData] = useState({
@@ -112,8 +115,10 @@ const UserHomePage = () => {
         />
         {!isEditing ? (
           <>
+            
             <h2>{userdata.name}</h2>
             <p>{userdata.email}</p>
+            <p>{date }</p>
             <button className="edit-button" onClick={handleEdit}>
               Edit Profile
             </button>
